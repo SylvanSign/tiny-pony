@@ -7,12 +7,19 @@ actor Main
     (let sec, let nano) = Time.now()
     let rand = Rand(sec.u64(), nano.u64())
 
-    var w: Array[F64] iso = recover iso Array[F64](3) end
+    var w: Array[F64] iso = recover Array[F64](3) end
     for i in Range(0, 3) do
       w.push(rand.real() - 0.5)
     end
-    let n = SimpleNeuron(env, recover val consume w end)
-    n.signal([1; 2])
+    let n1 = SimpleNeuron(env, recover val consume w end)
+    n1.signal([1; 2])
+
+    w = recover Array[F64](3) end
+    for i in Range(0, 3) do
+      w.push(rand.real() - 0.5)
+    end
+    let n2 = SimpleNeuron(env, recover val consume w end)
+    n2.signal([1; 2])
 
 actor SimpleNeuron
   let _env: Env

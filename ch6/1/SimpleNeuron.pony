@@ -9,10 +9,11 @@ actor Main
     let out = env.out
 
     for i in Range(0, 100) do
-      SimpleNeuron(out, _weights(rand)).signal([1; 2])
+      let weights = _weights(rand)
+      SimpleNeuron(out, consume weights).signal([1; 2])
     end
 
-  fun _weights(rand: Rand): Array[F64] val =>
+  fun _weights(rand: Rand): Array[F64] iso^ =>
     var ws: Array[F64] iso = recover Array[F64](3) end
     for i in Range(0, 3) do
       ws.push(rand.real() - 0.5)
@@ -21,11 +22,11 @@ actor Main
 
 actor SimpleNeuron
   let _out: OutStream
-  let _weights: Array[F64] val
+  let _weights: Array[F64] ref
 
-  new create(out: OutStream, weights: Array[F64] val) =>
+  new create(out: OutStream, weights: Array[F64] iso) =>
     _out = out
-    _weights = weights
+    _weights = consume weights
 
   be signal(input: Array[F64] val) =>
     let dot_product: F64 = _dot(input, _weights)
@@ -36,7 +37,7 @@ actor SimpleNeuron
               "Output: " + _inspect(output)
     _out.print(str)
 
-  fun _dot(input: Array[F64] val, weights: Array[F64] val): F64 =>
+  fun _dot(input: Array[F64] box, weights: Array[F64] box): F64 =>
     var result: F64 = 0
     for i in Range(0, input.size()) do
       try result = result + (input(i)? * weights(i)?) end
@@ -44,5 +45,5 @@ actor SimpleNeuron
     try result = result + weights(weights.size() - 1)? end
     result
 
-  fun _inspect(arr: Array[F64] val): String =>
+  fun _inspect(arr: Array[F64] box): String =>
     "; ".join(arr.values())

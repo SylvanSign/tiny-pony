@@ -12,7 +12,7 @@ actor Neuron
 
   be forward(input: Array[F64] val) =>
     let dot_product = _dot(input, _weights)
-    let output = [dot_product.tanh()]
+    let output = recover val [dot_product.tanh()] end
     let msg = "****Thinking****\n" +
               " Input: " + Inspect(input) + "\n" +
               " With Weights: " + Inspect(_weights) + "\n" +
@@ -20,7 +20,7 @@ actor Neuron
     _out.print(msg)
     _actuator.forward(output)
 
-  fun _dot(input: Array[F64] box, weights: Array[F64] box): F64 =>
+  fun _dot(input: Array[F64] val, weights: Array[F64] val): F64 =>
     var result: F64 = 0
     for i in Range(0, input.size()) do
       try result = result + (input(i)? * weights(i)?) end

@@ -1,0 +1,14 @@
+[
+  {
+    "type": "sensor",
+    "id": "s1"
+  },
+  {
+    "type": "neuron",
+    "id": "n1"
+  },
+  {
+    "type": "neuron",
+    "id": "n2"
+  },
+]

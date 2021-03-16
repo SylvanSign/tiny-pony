@@ -3,21 +3,25 @@ use "random"
 use "collections"
 
 class RandGenerator
-  embed _rand: Rand ref
+  embed _rand: Rand iso
 
   new iso create() =>
-    (let sec, let nano) = Time.now()
-    _rand = Rand(sec.u64(), nano.u64())
+    _rand = recover
+      (let sec, let nano) = Time.now()
+      Rand(sec.u64(), nano.u64())
+    end
 
-  fun iso weights(num: USize): Array[F64] val =>
-    (consume this)._reals(num, -0.5)
+  fun ref weights(num: USize val): Array[F64] val =>
+    _reals(num, -0.5)
 
-  fun iso signal(num: USize): Array[F64] val =>
+  fun ref signal(num: USize val): Array[F64] val =>
     _reals(num)
 
-  fun iso _reals(num: USize, bias: F64 = 0): Array[F64] val =>
-    var ws: Array[F64] = Array[F64](num)
-    for i in Range(0, num) do
-      ws.push(_rand.real() + bias)
+  fun ref _reals(num: USize val, bias: F64 val = 0): Array[F64] val =>
+    recover val
+      var ws: Array[F64] = Array[F64](num)
+      for i in Range(0, num) do
+        ws.push(_rand.real() + bias)
+      end
+      ws
     end
-    recover val ws end

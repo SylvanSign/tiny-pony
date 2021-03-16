@@ -11,13 +11,13 @@ class RandGenerator
       Rand(sec.u64(), nano.u64())
     end
 
-  fun ref weights(num: USize val): Array[F64] val =>
+  fun ref weights(num: USize): Array[F64] val =>
     _reals(num, -0.5)
 
-  fun ref signal(num: USize val): Array[F64] val =>
+  fun ref signal(num: USize): Array[F64] val =>
     _reals(num)
 
-  fun ref _reals(num: USize val, bias: F64 val = 0): Array[F64] val =>
+  fun ref _reals(num: USize, bias: F64 = 0): Array[F64] val =>
     recover val
       var ws: Array[F64] = Array[F64](num)
       for i in Range(0, num) do

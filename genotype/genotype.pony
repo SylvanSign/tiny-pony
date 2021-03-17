@@ -29,4 +29,4 @@ actor Main
     let pretty = doc.string(where indent="  ", pretty_print=true)
     env.out.print(pretty)
     file.set_length(0)
-    file.write(pretty)
+    file.print(pretty)
